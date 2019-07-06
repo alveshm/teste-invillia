@@ -1,14 +1,10 @@
 'use strict';
 
 const ValidationInput = require('../validators/input-validator');
-const repository = require('../repositories/tournament-repository');
+const repository = require('../repositories/match-repository');
 
 exports.post = async(req, res, next) => {
     let validator = new ValidationInput();
-
-    validator.hasMinLen(req.body.titulo, 5, 'O título deve ter no minímo 5 letras.');
-    validator.hasMinLen(req.body.descricao, 10, 'A descrição deve ter no minímo 10 letras.');
-    validator.hasMinLen(req.body.slug, 6, 'O slug deve ter no minímo 6 letras.');
 
     if (!validator.isValid()) {
         res.status(400).send(validator.errors()).end();
@@ -37,11 +33,6 @@ exports.get = async(req, res, next) => {
             message: 'Falha ao processar requisição.'
         });
     }
-}
-
-exports.getByTitle = async(title) => {
-    const data = await repository.getByTitle(title);
-    return data;
 }
 
 exports.put = async(req, res, next) => {

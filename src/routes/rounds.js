@@ -2,11 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/tournament-controller');
+const controller = require('../controllers/round-controller');
 
 router.post('/', controller.post);
-router.put('/admin/:id', controller.put);
 router.get('/', controller.get);
-router.delete('/', controller.delete);
 
 module.exports = router;
