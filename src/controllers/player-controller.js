@@ -1,40 +1,34 @@
 'use strict';
 
-const mongoose = require('mongoose');
-const Player = mongoose.model('Player');
+const repository = require('../repositories/player-repository');
 
-exports.post = (req, res, next) => {
-    var player = new Player(req.body);
-    player.save().then(data => {
+exports.post = async(req, res, next) => {
+
+    try {
+        await repository.create(req.body);
         res.status(201).send({ 
-            message: 'Jogador cadastrada com sucesso!' 
+            message: 'Jogador cadastrado com sucesso!' 
         });
-        player.save();
-    }).catch(e => {
-        res.status(400).send({ 
-            message: 'Falha ao cadastrar jogador!',
-            data: e 
+    } catch (error) {
+        res.status(500).send({
+            message: 'Falha ao processar requisição.'
         });
-    });
+    }
     
 }
 
-exports.get = (req, res, next) => {
-    player.find({}, 'nome telefone').then(data => {
+exports.get = async(req, res, next) => {
+    try {
+        const data = await repository.get();
         res.status(200).send({data});
-    }).catch(e => {
-        res.status(400).send({e});
-    });
+    } catch (error) {
+        res.status(500).send({
+            message: 'Falha ao processar requisição.'
+        });
+    }
 }
 
-exports.put = (req, res, next) => {
-    const id = req.params.id;
-    res.status(201).send({
-        id: id,
-        item: req.body
-    });
-};
-
-exports.delete = (req, res, next) => {
-    res.status(200).send(req.body);
-};
+exports.getByName = async(name) => {
+    const data = await repository.getByName(name);
+    return data;
+}

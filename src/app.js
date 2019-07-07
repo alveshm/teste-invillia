@@ -13,14 +13,16 @@ const router = express.Router();
 // Load Models
 const Tournament = require('./models/tournament');
 const Round = require('./models/round');
-const Gamer = require('./models/player');
+const Player = require('./models/player');
 const Match = require('./models/match');
 
 // Load routes
 const indexRoute = require('./routes/index');
 const tournamentRoute = require('./routes/tournaments');
 const roundRoute = require('./routes/rounds');
+const matchRoute = require('./routes/matches');
 const playerRoute = require('./routes/players');
+const rankingRoute = require('./routes/ranking');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ 
@@ -31,6 +33,7 @@ app.use('/', indexRoute);
 app.use('/tournaments', tournamentRoute);
 app.use('/rounds', roundRoute);
 app.use('/players', playerRoute);
-app.use('/matches', playerRoute);
+app.use('/matches', matchRoute);
+app.use('/ranking', rankingRoute);
 
 module.exports = app;

@@ -14,8 +14,8 @@ exports.get = async() => {
     return res;
 }
 
-exports.getByTitle = async() => {
+exports.getByTitle = async(title) => {
     const res = await Round
-        .find({titulo: title}, 'titulo descricao slug');
+        .findOne({titulo: title}, 'titulo descricao slug');
     return res;
 }

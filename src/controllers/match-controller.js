@@ -1,27 +1,53 @@
 'use strict';
 
-const ValidationInput = require('../validators/input-validator');
 const repository = require('../repositories/match-repository');
+const roundController = require('../controllers/round-controller');
+const tournamentController = require('../controllers/tournament-controller');
+const playerController = require('../controllers/player-controller');
 
 exports.post = async(req, res, next) => {
-    let validator = new ValidationInput();
-
-    if (!validator.isValid()) {
-        res.status(400).send(validator.errors()).end();
-        return;
-    }
-
+    req.body.torneio = await verifyTournament(req.body.torneio);
+    req.body.etapa = await verifyRound(req.body.etapa);
+    req.body.jogador = await verifyPlayer(req.body.jogador);
     try {
         await repository.create(req.body);
-        res.status(201).send({ 
+        res.status(201).send({
             message: 'Torneio cadastrado com sucesso!' 
         });
     } catch (error) {
         res.status(500).send({
-            message: 'Falha ao processar requisição.'
+            message: 'Falha ao processar requisição.',
+            error
         });
     }
     
+}
+
+async function verifyTournament(tournamentTitle) {
+    var data = await tournamentController.getByTitle(tournamentTitle);
+    if (data.length == 0) {
+        return false;
+    } else {
+        return data._id;
+    }
+}
+
+async function verifyRound(roundTitle) {
+    var data = await roundController.getByTitle(roundTitle);
+    if (data.length == 0) {
+        return false;
+    } else {
+        return data;
+    }  
+}
+
+async function verifyPlayer(playerName) {
+    var data = await playerController.getByName(playerName);
+    if (data.length == 0) {
+        return false;
+    } else {
+        return data._id;
+    }  
 }
 
 exports.get = async(req, res, next) => {
@@ -35,17 +61,34 @@ exports.get = async(req, res, next) => {
     }
 }
 
-exports.put = async(req, res, next) => {
+exports.getByRoundTournament = async(round, tournament) => {
+        tournament = await verifyTournament(tournament);
+        round = await verifyRound(round);
+        
+        var data = await repository.getByRoundTournament(round, tournament);
+        return data;
+}
+
+exports.getRoundByTournament = async(tournament) => {
+    tournament = await verifyTournament(tournament);
+    
+    var data = await repository.getRoundByTournament(tournament);
+    return data;
+}
+
+exports.getByTournament = async(tournament) => {
+    tournament = await verifyTournament(tournament);
+    
+    var data = await repository.getByTournament(tournament);
+    return data;
+}
+
+exports.savePoints = async(id, pontos) => {
     try {
-        var data = await repository.update(req.params.id, req.body);
-        res.status(200).send({
-            message: 'Torneio atualizado com sucesso.',
-            error: data
-        });
+        await repository.update(id, pontos);
+        return;
     } catch (error) {
-        res.status(500).send({
-            message: 'Falha ao atualizar torneio.'
-        });
+        
     }
 };
 

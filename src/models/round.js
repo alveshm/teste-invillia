@@ -11,14 +11,12 @@ const schema = new Schema({
     },
     slug: {
         type: String,
-        required: [true, 'Slug é um campo obrigatório.'],
         trim: true,
         index: true,
         unique: true
     },
     descricao: {
-        type: String,
-        required: [true, 'Descrição é um campo obrigatório.']
+        type: String
     }
 });
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const ValidationInput = require('../validators/input-validator');
-const repository = require('../repositories/tournament-repository');
+const repository = require('../repositories/round-repository');
 
 exports.post = async(req, res, next) => {
     let validator = new ValidationInput();
@@ -11,18 +11,19 @@ exports.post = async(req, res, next) => {
     validator.hasMinLen(req.body.slug, 6, 'O slug deve ter no minímo 6 letras.');
 
     if (!validator.isValid()) {
-        res.status(400).send(validator.errors()).end()
+        res.status(400).send(validator.errors()).end();
         return;
     }
 
     try {
-        await repository.create();       
+        await repository.create(req.body);       
         res.status(201).send({ 
             message: 'Etapa cadastrada com sucesso!' 
         });
     } catch (error) {
         res.status(500).send({
-            message: 'Falha ao cadastar etapa.'
+            message: 'Falha ao cadastar etapa.',
+            error: error
         });
     }
 }

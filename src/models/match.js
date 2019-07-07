@@ -10,15 +10,18 @@ const schema = new Schema({
     },
     etapa: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'rounds'
+        ref: 'round'
     },
     jogador: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'gamer'
+        ref: 'player'
     },
     pontos: {
         type: Number,
         required: [true, 'Pontos é um campo obrigatório.']
+    },
+    pontosFinal: {
+        type: Number
     }
 });
 

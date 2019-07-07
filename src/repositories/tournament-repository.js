@@ -8,15 +8,14 @@ exports.create = async(data) => {
     await tournament.save();
 }
 
-exports.get = async() => {
+exports.get = async() => {                                                                                                                                                                                         
     const res = await Tournament
         .find({}, 'titulo descricao slug');
     return res;
 }
 
-exports.getByTitle = async(title) => {
-    const res = await Tournament
-        .find({titulo: title}, 'titulo descricao slug');
+exports.getByTitle = async(slug) => {
+    const res = await Tournament.findOne({slug: slug}, 'titulo descricao slug');
     return res;
 }
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Player = mongoose.model('player');
+const Player = mongoose.model('Player');
 
 exports.create = async(data) => {
     var player = new Player(data);
@@ -16,6 +16,6 @@ exports.get = async() => {
 
 exports.getByName = async(name) => {
     const res = await Player
-        .find({nome: name}, 'nome telefone etapa pontos');
+        .findOne({nome: name}, 'nome telefone etapa pontos');
     return res;
 }
