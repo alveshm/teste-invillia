@@ -19,3 +19,9 @@ exports.getByTitle = async(title) => {
         .findOne({titulo: title}, 'titulo descricao slug');
     return res;
 }
+
+exports.getTitle = async(id) => {
+    const res = await Round
+    .findById(id);
+    return res;
+}

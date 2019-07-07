@@ -35,7 +35,7 @@ exports.getByTournament = async(torneio) => {
     const res = await Match
         .find({
             torneio: torneio
-        }, 'torneio jogador etapa pontos');
+        }, 'torneio jogador etapa pontos pontosFinal');
     return res;
 }
 

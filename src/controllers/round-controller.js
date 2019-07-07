@@ -43,3 +43,8 @@ exports.getByTitle = async(title) => {
     const data = await repository.getByTitle(title);
     return data;
 }
+
+exports.getTitle = async(id) => {
+    const data = await repository.getTitle(id);
+    return data;
+}

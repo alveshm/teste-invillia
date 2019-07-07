@@ -1,6 +1,7 @@
 'use strict';
 
 const matchController = require('../controllers/match-controller');
+const roundController = require('../controllers/round-controller');
 
 exports.get = async(req, res, next) => {
     try {
@@ -41,29 +42,29 @@ async function getRankRound(torneio, etapa) {
 async function getRankTournament(torneio) {
     var matches = await matchController.getByTournament(torneio);
     var rounds = await matchController.getRoundByTournament(torneio);
-    rounds.forEach(function (round) {
-        getRankRound(round.torneio, round.etapa);
-    })
-    return rounds[1];
+    rounds.forEach(async function (round) {
+        var etapa = await roundController.getTitle(round);
+        await getRankRound(torneio, etapa.titulo);
+    });
     matches.sort(function (a, b) {
         return b.pontos - a.pontos;
     });
     var arrayOfMatches = [];
     var campos = {};
-    matches.forEach(function(match, index){
-        var points = 0;
-        matches.forEach(function(cont, key){
-            if (match.jogador == cont.jogador
-                && cont._id != match._id) {
-                points = points + cont.pontosFinal;
+    for (var i in matches){
+        var points = matches[i].pontosFinal;
+        for (var k in matches){
+            if (matches[i].jogador == matches[k].jogador && matches[i]._id != matches[k]) {
+                points += matches[k].pontosFinal;
+                arrayOfMatches.push(i)
             }
-        });
-        let jogador = match.jogador;
+        }
+        var jogador = matches[i].jogador;
         campos = {
             jogador: jogador,
             pontos: points
         }
-        arrayOfMatches.put(campos);
-    });
+        arrayOfMatches.push(campos);
+    }
     return arrayOfMatches;  
 }
