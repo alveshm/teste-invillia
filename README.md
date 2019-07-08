@@ -4,9 +4,11 @@ Tecnologias utilizadas:
 
 NodeJS + Express
 
-Para executar o projeto, basta fazer o clone e rodar o comando abaixo:
+Para executar o projeto, basta fazer o clone entrar na pasta do projeto e rodar o comando abaixo:
 
-<pre>npm start</pre>
+<pre>npm install</pre>
+
+<pre>node ./bin/server.js</pre>
 
 Dentro da basta do projeto
 
